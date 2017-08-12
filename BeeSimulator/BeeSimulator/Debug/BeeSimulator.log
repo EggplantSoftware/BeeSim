@@ -1,0 +1,15 @@
+﻿  Display.cpp
+c:\users\jonathan cline\source\repos\beesimulator\beesimulator\beesimulator\display.h(33): error C2065: 'dispX': undeclared identifier
+c:\users\jonathan cline\source\repos\beesimulator\beesimulator\beesimulator\display.h(33): error C2065: 'dispY': undeclared identifier
+c:\users\jonathan cline\source\repos\beesimulator\beesimulator\beesimulator\display.h(34): error C2065: 'dispX': undeclared identifier
+c:\users\jonathan cline\source\repos\beesimulator\beesimulator\beesimulator\display.h(34): error C2065: 'dispY': undeclared identifier
+c:\users\jonathan cline\source\repos\beesimulator\beesimulator\beesimulator\display.cpp(21): warning C4996: 'wcscpy': This function or variable may be unsafe. Consider using wcscpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.14393.0\ucrt\corecrt_wstring.h(121): note: see declaration of 'wcscpy'
+  Generating Code...
+  Compiling...
+  Main.cpp
+c:\users\jonathan cline\source\repos\beesimulator\beesimulator\beesimulator\display.h(33): error C2065: 'dispX': undeclared identifier
+c:\users\jonathan cline\source\repos\beesimulator\beesimulator\beesimulator\display.h(33): error C2065: 'dispY': undeclared identifier
+c:\users\jonathan cline\source\repos\beesimulator\beesimulator\beesimulator\display.h(34): error C2065: 'dispX': undeclared identifier
+c:\users\jonathan cline\source\repos\beesimulator\beesimulator\beesimulator\display.h(34): error C2065: 'dispY': undeclared identifier
+  Generating Code...
