@@ -4,8 +4,8 @@ Display::Display(){}
 
 
 void Display::initialize_vars() {
-	/*SetConsoleDisplayMode(consoleOut, CONSOLE_FULLSCREEN_MODE, 0);
-	GetConsoleScreenBufferInfo(consoleOut, &csbi);
+	SetConsoleDisplayMode(consoleOut, CONSOLE_FULLSCREEN_MODE, 0);
+	/*GetConsoleScreenBufferInfo(consoleOut, &csbi);
 	newSbSize.X = csbi.dwSize.X + 200;
 	newSbSize.Y = csbi.dwSize.Y + 200;
 	SetConsoleScreenBufferSize(consoleOut, newSbSize);*/
@@ -25,6 +25,8 @@ void Display::initialize_vars() {
 
 	char bufferScreen[dispX][dispY];
 	char displayedScreen[dispX][dispY];
+
+	char currentChar;
 
 void Display::clear_screen() {
 	COORD topLeft = { 0, 0 };
@@ -51,13 +53,24 @@ void Display::draw_something(int x, int y) {
 }
 
 void Display::draw_box(int x1, int y1, int x2, int y2) {
-	SetCursorPos(x1, y1);
-	for (int ix = 0; ix != x2; ix++) {
-
+	bufferScreen[x1][y1] = 201;
+	for (int ix = x1+1; ix != x2-1; ix++) {
+		bufferScreen[ix][y1] = 205;
 	}
+	bufferScreen[x2][y1] = 187;
+	for (int iy = y1 + 1; iy != y2 - 1; iy++) {
+		bufferScreen[x1][iy] = 186;
+		bufferScreen[x2][iy] = 186;
+	}
+	bufferScreen[x1][y2] = 200;
+	for (int ix = x1 + 1; ix != x2 - 1; ix++) {
+		bufferScreen[ix][y2] = 205;
+	}
+	bufferScreen[x2][y2] = 188;
 }
 
 void Display::update_screen() {
+	this->clear_screen();
 	for (int y = 0; y != dispY; ++y)
 	{
 		for (int x = 0; x != dispX; ++x)

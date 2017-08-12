@@ -22,8 +22,12 @@ int main() {
 			disp.clear_screen();
 		}
 		if (GetKeyState('D') & 0x8000) {
-			disp.draw_something(5, 3);
+			disp.draw_box(2, 2, 7, 7);
+		}
+		if (GetKeyState('U') & 0x8000) {
+			disp.update_screen();
 		}
 	}
 	return 0;
 }
+
