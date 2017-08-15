@@ -8,7 +8,6 @@
 using namespace std;
 
 bool isRunning = 1;
-unsigned short int temp[7] = { 195, 196, 196, 197, 196, 196, 180 };
 
 Display disp;
 
@@ -22,16 +21,19 @@ int main() {
 			isRunning = 0;
 		}
 		if (GetKeyState('C') & 0x8000) {
-			disp.draw_border_filled();
+			disp.draw_border_filled(0x0F);
 		}
 		if (GetKeyState('D') & 0x8000) {
-			disp.draw_border_hollow();
+			disp.draw_border_hollow(0x0F);
 		}
 		if (GetKeyState('U') & 0x8000) {
 			disp.update_screen();
 		}
 		if (GetKeyState('F') & 0x8000) {
-			disp.add_chars(158, 6, temp, 0x0F);
+			disp.add_chars(130, 6, { 123, 121 } , 0x0F);
+		}
+		if (GetKeyState('B') & 0x8000) {
+			disp.make_button_list();
 		}
 		if (GetKeyState(VK_ADD) & 0x8000) {
 			disp.change_font_size(1);
