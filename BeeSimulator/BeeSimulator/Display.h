@@ -17,13 +17,13 @@ class Display
 {
 public:
 	Display();
-	void draw_something(int, int);
 	void update_screen();
-	void draw_border_hollow();
-	void draw_border_filled();
+	void draw_border_hollow(float);
+	void draw_border_filled(float);
 	void initialize_vars();
 	void change_font_size(short int);
-	void add_chars(int, int, short unsigned int[], float);
+	void add_chars(int, int, vector<int>, float);
+	void make_button_list();
 	~Display();
 private:
 	HANDLE consoleOut = GetStdHandle(STD_OUTPUT_HANDLE);
