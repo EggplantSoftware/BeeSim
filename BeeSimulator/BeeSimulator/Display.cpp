@@ -2,46 +2,41 @@
 
 Display::Display(){}
 
-
 void Display::initialize_vars() {
-	SetConsoleDisplayMode(consoleOut, CONSOLE_FULLSCREEN_MODE, 0);
-	/*GetConsoleScreenBufferInfo(consoleOut, &csbi);
-	newSbSize.X = csbi.dwSize.X + 200;
-	newSbSize.Y = csbi.dwSize.Y + 200;
-	SetConsoleScreenBufferSize(consoleOut, newSbSize);*/
+	GetConsoleScreenBufferInfo(consoleOut, &csbi);
+	screenSize.X = 156;
+	screenSize.Y = 40;
+	SetConsoleScreenBufferSize(consoleOut, screenSize);
 
 	cfi.cbSize = sizeof(cfi);
 	cfi.nFont = 0;
-	cfi.dwFontSize.X = 0;                   // Width of each character in the font
-	cfi.dwFontSize.Y = 25;                  // Height
+	cfi.dwFontSize.X = 0;
+	cfi.dwFontSize.Y = 25;
 	cfi.FontFamily = FF_DONTCARE;
 	cfi.FontWeight = FW_NORMAL;
-	std::wcscpy(cfi.FaceName, L"Consolas"); // Choose your font
+	std::wcscpy(cfi.FaceName, L"Consolas");
 	SetCurrentConsoleFontEx(consoleOut, FALSE, &cfi);
 }
 
-	const unsigned int dispX = 100;
-	const unsigned int dispY = 30;
-
-	char bufferScreen[dispX][dispY];
-	char displayedScreen[dispX][dispY];
-
-	char currentChar;
-
-void Display::clear_screen() {
-	COORD topLeft = { 0, 0 };
-	cout.flush();
-	if (!GetConsoleScreenBufferInfo(consoleOut, &csbi)) {
-		// TODO: Handle failure!
-		cout << "error getting screen size" << endl;
-		abort();
-	}
-	DWORD length = csbi.dwSize.X * csbi.dwSize.Y;
-	DWORD written;
-	FillConsoleOutputCharacter(consoleOut, TEXT(' '), length, topLeft, &written);
-	FillConsoleOutputAttribute(consoleOut, csbi.wAttributes, length, topLeft, &written);
-	SetConsoleCursorPosition(consoleOut, topLeft);
+void Display::change_font_size(short int i) {
+	cfi.cbSize = sizeof(cfi);
+	cfi.nFont = 0;
+	cfi.dwFontSize.X = 0;
+	cfi.dwFontSize.Y += i;
+	cfi.FontFamily = FF_DONTCARE;
+	cfi.FontWeight = FW_NORMAL;
+	std::wcscpy(cfi.FaceName, L"Consolas");
+	SetCurrentConsoleFontEx(consoleOut, FALSE, &cfi);
 }
+
+char currentChar;
+
+//Default sizes for 1920 x 1080 p monitor below, change font size if text is off
+const unsigned int dispX = 160;
+const unsigned int dispY = 42;
+
+char displayedScreen[dispX][dispY];
+char bufferScreen[dispX][dispY];
 
 void Display::draw_something(int x, int y) {
 	cout.flush();
@@ -52,25 +47,61 @@ void Display::draw_something(int x, int y) {
 	cout << "Benis";
 }
 
-void Display::draw_box(int x1, int y1, int x2, int y2) {
-	bufferScreen[x1][y1] = 201;
-	for (int ix = x1+1; ix != x2-1; ix++) {
-		bufferScreen[ix][y1] = 205;
+void Display::draw_border_hollow() {
+	//Upper Left corner
+	bufferScreen[0][0] = 201;
+	for (int x = 1; x != dispX-1; x++) {
+		//Horizontal
+		bufferScreen[x][0] = 205;
 	}
-	bufferScreen[x2][y1] = 187;
-	for (int iy = y1 + 1; iy != y2 - 1; iy++) {
-		bufferScreen[x1][iy] = 186;
-		bufferScreen[x2][iy] = 186;
+	//Upper Right corner
+	bufferScreen[dispX-1][0] = 187;
+	for (int y = 1; y != dispY-1; y++) {
+		//Vertical
+		bufferScreen[0][y] = 186;
 	}
-	bufferScreen[x1][y2] = 200;
-	for (int ix = x1 + 1; ix != x2 - 1; ix++) {
-		bufferScreen[ix][y2] = 205;
+	//Lower Left corner
+	bufferScreen[0][dispY-1] = 200;
+	for (int x = 1; x != dispX-1; x++) {
+		//Horizontal
+		bufferScreen[x][dispY-1] = 205;
 	}
-	bufferScreen[x2][y2] = 188;
+	//Lower Right Corner
+	bufferScreen[dispX-1][dispY-1] = 188;
+	for (int y = 1; y != dispY - 1; y++) {
+		//Vertical
+		bufferScreen[dispX-1][y] = 186;
+	}
+}
+
+void Display::draw_border_filled() {
+	//Upper Left corner
+	bufferScreen[0][0] = 218;
+	for (int x = 1; x != dispX - 1; x++) {
+		//Horizontal
+		bufferScreen[x][0] = 196;
+	}
+	//Upper Right corner
+	bufferScreen[dispX - 1][0] = 191;
+	for (int y = 1; y != dispY - 1; y++) {
+		//Vertical
+		bufferScreen[0][y] = 179;
+	}
+	//Lower Left corner
+	bufferScreen[0][dispY - 1] = 192;
+	for (int x = 1; x != dispX - 1; x++) {
+		//Horizontal
+		bufferScreen[x][dispY - 1] = 196;
+	}
+	//Lower Right Corner
+	bufferScreen[dispX - 1][dispY - 1] = 217;
+	for (int y = 1; y != dispY - 1; y++) {
+		//Vertical
+		bufferScreen[dispX - 1][y] = 179;
+	}
 }
 
 void Display::update_screen() {
-	this->clear_screen();
 	for (int y = 0; y != dispY; ++y)
 	{
 		for (int x = 0; x != dispX; ++x)
@@ -78,8 +109,24 @@ void Display::update_screen() {
 			if (displayedScreen[x][y] == bufferScreen[x][y]) {
 				continue;
 			}
-			SetCursorPos(x, y);
+			displayedScreen[x][y] = bufferScreen[x][y];
+			tempDraw = { (SHORT)x, (SHORT)y };
+			SetConsoleCursorPosition(consoleOut, tempDraw);
 			cout << displayedScreen[x][y];
+		}
+	}
+	tempDraw = { (SHORT)1, (SHORT)1 };
+	SetConsoleCursorPosition(consoleOut, tempDraw);
+	cout.flush();
+}
+
+void Display::add_chars(int x, int y, short unsigned int c[], float col) {
+	for (int i = 0; i != sizeof(c); i++) {
+		if (x + i < dispX) {
+			bufferScreen[x + i][y] = c[i];
+		}
+		else {
+			bufferScreen[x + i][y] = c[i];
 		}
 	}
 }
